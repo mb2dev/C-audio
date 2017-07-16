@@ -12,7 +12,9 @@ class EQSection : public QWidget
     Q_OBJECT
 public:
     explicit EQSection(QWidget *parent = 0);
-
+    EQWidget *m_high;
+    EQWidget *m_medium;
+    EQWidget *m_bass;
 signals:
 
 public slots:
@@ -20,9 +22,6 @@ public slots:
 
 protected:
     QVBoxLayout *m_layout;
-    EQWidget *m_high;
-    EQWidget *m_medium;
-    EQWidget *m_bass;
 
 private:
     void createUi();

@@ -3,11 +3,14 @@
 
 #include "fmod.hpp"
 #include "soundplayer.h"
+#include <QObject>
 
-class SoundManager {
+class SoundManager : public QObject {
+
+    Q_OBJECT
 
 public :
-    SoundManager();
+    explicit SoundManager(QObject *parent = 0);
     ~SoundManager();
 
     SoundPlayer *player_a, *player_b;
@@ -16,6 +19,10 @@ protected:
 
 private :
     FMOD::System *system;
+
+//public slots:
+//    void startPlayback(const int player);
+//    void suspend(const int player);
 
 };
 

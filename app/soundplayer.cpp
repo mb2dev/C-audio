@@ -6,9 +6,37 @@ SoundPlayer::SoundPlayer(){
     system = nullptr;
 }
 
-SoundPlayer::SoundPlayer(FMOD::System *sys) : system(sys)
+SoundPlayer::SoundPlayer(FMOD::System *sys)
+    : system(sys)
 {
     qDebug("system object %p", system);
+
+}
+
+void SoundPlayer::initFX(){
+    system->createDSPByType(FMOD_DSP_TYPE_ECHO,  &dsp_echo);
+    channel->addDSP(0, dsp_echo);
+    dsp_echo->setBypass(true);
+
+//    system->createDSPByType(FMOD_DSP_TYPE_LOWPASS, &dsp_low_pass);
+//    channel->addDSP(FMOD_CHANNELCONTROL_DSP_HEAD, dsp_low_pass);
+//    dsp_low_pass->setBypass(true);
+
+//    system->createDSPByType(FMOD_DSP_TYPE_HIGHPASS,&dsp_high_pass);
+//    channel->addDSP(FMOD_CHANNELCONTROL_DSP_HEAD, dsp_high_pass);
+//    dsp_low_pass->setBypass(true);
+
+    system->createDSPByType(FMOD_DSP_TYPE_THREE_EQ, &dsp_three_eq);
+    channel->addDSP(FMOD_CHANNELCONTROL_DSP_HEAD, dsp_three_eq);
+
+//    system->createDSPByType(FMOD_DSP_TYPE_FLANGE,&dsp_flange);
+//    channel->addDSP(FMOD_CHANNELCONTROL_DSP_HEAD, dsp_flange);
+
+//    system->createDSPByType(FMOD_DSP_TYPE_COMPRESSOR, &dsp_compressor);
+//    channel->addDSP(FMOD_CHANNELCONTROL_DSP_HEAD, dsp_compressor);
+
+//    system->createDSPByType(FMOD_DSP_TYPE_OSCILLATOR, &dsp_tone);
+//    channel->addDSP(FMOD_CHANNELCONTROL_DSP_HEAD, dsp_tone);
 }
 
 SoundPlayer::~SoundPlayer()
@@ -39,12 +67,43 @@ FMOD::Sound * SoundPlayer::load(char* path) {
 
 // allow to play a sound
 FMOD::Channel* SoundPlayer::play() {
-    system->playSound(sound, 0, false, &channel);
-    if (result != FMOD_OK)
-    {
-       qDebug(" Play Sound FMOD error! (%d)\n", result);
+    bool paused, isplaying;
+    channel->getPaused(&paused);
+    channel->isPlaying(&isplaying);
+    qDebug("is paused %d", paused);
+    if(loaded && paused){
+        channel->setPaused(false);
+    }else if(!loaded){
+        result = system->playSound(sound, 0, false, &channel);
+        if (result != FMOD_OK)
+        {
+           qDebug(" Play Sound FMOD error! (%d)\n", result);
+        }else{
+            loaded = true;
+            initFX();
+        }
     }
     return channel;
+}
+
+void SoundPlayer::stop() {
+    result = channel->setPaused(true);
+    if (result != FMOD_OK)
+    {
+       qDebug("Stop FMOD error! (%d)\n", result);
+    }
+}
+
+void SoundPlayer::setVolume(float volume){
+    if(!loaded){
+        return;
+    }
+
+    result = channel->setVolume(volume);
+    if (result != FMOD_OK)
+    {
+       qDebug("SetVolume FMOD error! (%d)\n", result);
+    }
 }
 
 // allow to get lenght of a sound
@@ -75,40 +134,45 @@ void SoundPlayer::backward(unsigned int i) {
 }
 
 void SoundPlayer::echo(float time) {
-    system->createDSPByType(FMOD_DSP_TYPE_ECHO,  &dsp_echo);
     dsp_echo->setParameterFloat(FMOD_DSP_ECHO_DELAY, time);
-    channel->addDSP(0, dsp_echo);
 }
 
 void SoundPlayer::removeEcho() {
     channel->removeDSP(dsp_echo);
 }
 
-void SoundPlayer::filterLowPass(int filter) {
-    system->createDSPByType(FMOD_DSP_TYPE_LOWPASS, &dsp_low_pass);
+// from -80.0 to 10.0
+void SoundPlayer::filter(FMOD_DSP_THREE_EQ eq, float db)
+{
+    qDebug() << "EQ TYPE" << eq << "db : " << db;
+    result = dsp_three_eq->setParameterFloat(eq, db);
+    if (result != FMOD_OK)
+    {
+       qDebug("filter FMOD error! (%d)\n", result);
+    }
+}
+
+void SoundPlayer::filterLowPass(int filter)
+{
     dsp_low_pass->setParameterInt(FMOD_DSP_LOWPASS_CUTOFF, filter);
-    channel->addDSP(0,dsp_low_pass);
 }
 
-void SoundPlayer::filterHighPass(int filter) {
-    system->createDSPByType(FMOD_DSP_TYPE_LOWPASS,&dsp_high_pass);
-    dsp_high_pass->setParameterInt(FMOD_DSP_LOWPASS_CUTOFF, filter);
-    channel->addDSP(0,dsp_high_pass);
+void SoundPlayer::filterHighPass(int filter)
+{
+    dsp_high_pass->setParameterInt(FMOD_DSP_HIGHPASS_CUTOFF, filter);
 }
 
-void SoundPlayer::filterFlange(int filter) {
-    system->createDSPByType(FMOD_DSP_TYPE_FLANGE,&dsp_flange);
+void SoundPlayer::filterFlange(int filter)
+{
     dsp_flange->setParameterInt(FMOD_DSP_FLANGE_RATE,filter);
-    channel->addDSP(0,dsp_flange);
-}
-void SoundPlayer::compressor(int filter) {
-    system->createDSPByType(FMOD_DSP_TYPE_COMPRESSOR, &dsp_compressor);
-    dsp_compressor->setParameterInt(FMOD_DSP_COMPRESSOR_ATTACK,1000);
-    channel->addDSP(0,dsp_compressor);
 }
 
-void SoundPlayer::tone(float filter) {
-   system->createDSPByType(FMOD_DSP_TYPE_OSCILLATOR, &dsp_tone);
+void SoundPlayer::compressor()
+{
+    dsp_compressor->setParameterInt(FMOD_DSP_COMPRESSOR_ATTACK,1000);
+}
+
+void SoundPlayer::tone(float filter)
+{
    dsp_tone->setParameterFloat(FMOD_DSP_OSCILLATOR_RATE,filter);
-   channel->addDSP(0,dsp_tone);
 }

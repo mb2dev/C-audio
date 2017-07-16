@@ -14,12 +14,12 @@ class EQWidget : public QWidget
 public:
     explicit EQWidget(QWidget *parent = 0);
     void setName(const QString);
+    QDial *m_dial;
 signals:
 
 public slots:
 
 protected:
-    QDial *m_dial;
     QLabel *m_label;
     QVBoxLayout *m_layout;
 private:

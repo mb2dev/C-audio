@@ -15,6 +15,18 @@ FXSection::FXSection(QWidget *parent)
 
 void FXSection::createUi()
 {
+    m_param_one->setMaximum(100);
+    m_param_two->setMaximum(100);
+    m_param_three->setMaximum(100);
+
+    m_param_one->setMinimum(0);
+    m_param_two->setMinimum(0);
+    m_param_three->setMinimum(0);
+
+    m_param_one->setSliderPosition(50);
+    m_param_two->setSliderPosition(50);
+    m_param_three->setSliderPosition(50);
+
     m_combo->addItem("Reverb");
     m_combo->addItem("Compressor");
     m_combo->addItem("Delay");
@@ -37,7 +49,7 @@ void FXSection::createUi()
     m_layout->addWidget(paramThree, 1, 3);
 
     this->setLayout(m_layout);
-    this->setStyleSheet("background-color : red");
+    //this->setStyleSheet("background-color : red");
 }
 
 void FXSection::connectUi()

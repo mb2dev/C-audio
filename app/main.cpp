@@ -9,13 +9,5 @@ int main(int argc, char *argv[])
     GVMainWindow w;
     w.show();
 
-    SoundManager manager;
-
-    QByteArray ba = app.applicationDirPath().toLatin1() + "/../drumloop.wav";
-    char *c_str = ba.data();
-
-    manager.player_a->load(c_str);
-    manager.player_a->play();
-
     return app.exec();
 }

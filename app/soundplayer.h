@@ -16,19 +16,24 @@ public:
     void forward(unsigned int i);
     void backward(unsigned int i);
     void stop();
+    void setVolume(float volume);
     void echo(float time);
     void removeEcho();
     void filterLowPass(int filter);
     void filterHighPass(int filter);
     void filterFlange(int filter);
-    void compressor(int filter);
+    void filter(FMOD_DSP_THREE_EQ eq, float db);
+    void compressor();
     void tone(float filter);
+    bool loaded = false;
+    void initFX();
 protected:
     FMOD::System *system;
     FMOD::Sound *sound;
     FMOD::DSP *dsp_echo;
     FMOD::DSP *dsp_high_pass;
     FMOD::DSP *dsp_low_pass;
+    FMOD::DSP *dsp_three_eq;
     FMOD::DSP *dsp_flange;
     FMOD::DSP *dsp_compressor;
     FMOD::DSP *dsp_tone;

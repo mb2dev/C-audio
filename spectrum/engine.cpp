@@ -239,9 +239,9 @@ void Engine::startPlayback()
             // The Windows backend seems to internally go back into ActiveState
             // while still returning SuspendedState, so to ensure that it doesn't
             // ignore the resume() call, we first re-suspend
-            m_audioOutput->suspend();
+//            m_audioOutput->suspend();
 #endif
-            m_audioOutput->resume();
+//            m_audioOutput->resume();
         } else {
             m_spectrumAnalyser.cancelCalculation();
             spectrumChanged(0, 0, FrequencySpectrum());
@@ -257,6 +257,7 @@ void Engine::startPlayback()
                 m_file->seek(0);
                 m_bufferPosition = 0;
                 m_dataLength = 0;
+                m_audioOutput->setVolume((qreal)0.0);
                 m_audioOutput->start(m_file);
             } else {
                 m_audioOutputIODevice.close();
@@ -335,17 +336,17 @@ void Engine::audioNotify()
                     const qint64 readPos = qMax(qint64(0), qMin(levelPosition, spectrumPosition));
                     const qint64 readEnd = qMin(m_analysisFile->size(), qMax(levelPosition + m_levelBufferLength, spectrumPosition + m_spectrumBufferLength));
                     const qint64 readLen = readEnd - readPos + audioLength(m_format, WaveformWindowDuration);
-                    qDebug() << "Engine::audioNotify [1]"
-                             << "analysisFileSize" << m_analysisFile->size()
-                             << "readPos" << readPos
-                             << "readLen" << readLen;
+//                    qDebug() << "Engine::audioNotify [1]"
+//                             << "analysisFileSize" << m_analysisFile->size()
+//                             << "readPos" << readPos
+//                             << "readLen" << readLen;
                     if (m_analysisFile->seek(readPos + m_analysisFile->headerLength())) {
                         m_buffer.resize(readLen);
                         m_bufferPosition = readPos;
                         m_dataLength = m_analysisFile->read(m_buffer.data(), readLen);
-                        qDebug() << "Engine::audioNotify [2]" << "bufferPosition" << m_bufferPosition << "dataLength" << m_dataLength;
+//                        qDebug() << "Engine::audioNotify [2]" << "bufferPosition" << m_bufferPosition << "dataLength" << m_dataLength;
                     } else {
-                        qDebug() << "Engine::audioNotify [2]" << "file seek error";
+//                        qDebug() << "Engine::audioNotify [2]" << "file seek error";
                     }
                     emit bufferChanged(m_bufferPosition, m_dataLength, m_buffer);
                 }

@@ -17,7 +17,7 @@ SOURCES += main.cpp \
     levelsection.cpp \
     filebrowser.cpp \
     soundmanager.cpp \
-    soundplayer.cpp \
+    soundplayer.cpp
 
 HEADERS += \
     gvmainwindow.h \
@@ -63,12 +63,16 @@ HEADERS += \
     ../spectrum/waveform.h \
     ../spectrum/wavfile.h
 
-win32:CONFIG(release, debug|release): LIBS += -L'E:/Program Files (x86)/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel/lib/' -lfmod64_vc
-else:win32:CONFIG(debug, debug|release): LIBS += -L'E:/Program Files (x86)/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel/lib/' -lfmod64_vc
-else:unix: LIBS += -L'E:/Program Files (x86)/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel/lib/' -lfmod64
+fmod_path = 'C:\Users\Gabriel\Documents\Qt\audiomixer\3rdparty\fmod'
+fmod_dir = $${fmod_path}/inc
+fmod_lib = $${fmod_path}/lib
 
-INCLUDEPATH += 'E:/Program Files (x86)/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel/inc'
-DEPENDPATH += 'E:/Program Files (x86)/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel/inc'
+win32:CONFIG(release, debug|release): LIBS += -L$${fmod_lib} -lfmod64_vc
+else:win32:CONFIG(debug, debug|release): LIBS += -L$${fmod_lib} -lfmod64_vc
+else:unix: LIBS += -L$${fmod_lib} -lfmod64
+
+INCLUDEPATH += $${fmod_dir}
+DEPENDPATH += $${fmod_dir}
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings

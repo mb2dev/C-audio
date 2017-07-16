@@ -6,7 +6,7 @@
 #include<QDebug>
 
 // init fmodEx sound
-SoundManager::SoundManager()
+SoundManager::SoundManager(QObject *parent) : QObject(parent)
 {
     result = FMOD::System_Create(&system);
     if (result != FMOD_OK)

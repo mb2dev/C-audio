@@ -11,7 +11,9 @@ class Player : public QWidget
     Q_OBJECT
 public:
     explicit Player(QWidget *parent = 0);
-
+    QPushButton *m_pauseBtn;
+    QPushButton *m_playBtn;
+    QPushButton *m_stopBtn;
 signals:
 
 public slots:
@@ -24,9 +26,7 @@ protected:
     QIcon m_playIcon;
     QIcon m_stopIcon;
     QIcon m_pauseIcon;
-    QPushButton *m_pauseBtn;
-    QPushButton *m_playBtn;
-    QPushButton *m_stopBtn;
+
 
 };
 

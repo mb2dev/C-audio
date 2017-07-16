@@ -18,6 +18,9 @@ void EQWidget::setName(const QString name){
 void EQWidget::createUi()
 {
     m_dial->setFixedSize(QSize(50,50));
+    m_dial->setMaximum(100);
+    m_dial->setMinimum(0);
+    m_dial->setSliderPosition(50);
     m_layout->addWidget(m_dial);
     m_label->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
     m_layout->addWidget(m_label);
