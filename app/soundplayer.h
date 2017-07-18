@@ -17,7 +17,7 @@ public:
     void backward(unsigned int i);
     void stop();
     void setVolume(float volume);
-    void echo(float time);
+    void echo(int paramIndex, int paramValue);
     void removeEcho();
     void filterLowPass(int filter);
     void filterHighPass(int filter);

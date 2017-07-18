@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QAudio>
 
+#include "fxinterface.h"
 #include "fxsection.h"
 #include "eqsection.h"
 #include "levelsection.h"
@@ -27,7 +28,7 @@ class AudioSection : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AudioSection(QWidget *parent = 0, const int orientation = 0, SoundManager* soundmanager = nullptr);
+    explicit AudioSection(QWidget *parent = 0, const int orientation = 0, SoundManager* soundmanager = nullptr, QString appPath = "");
     ~AudioSection();
 
     // QObject
@@ -38,6 +39,8 @@ public:
 signals:
 
 public slots:
+    void fxChanged(FXInterface*);
+    void fxParamValueChanged(int, int, int);
     void loadFile(int index, QString filePath);
     void stateChanged(QAudio::Mode mode, QAudio::State state);
     void formatChanged(const QAudioFormat &format);

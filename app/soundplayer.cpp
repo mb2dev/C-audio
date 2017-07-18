@@ -133,8 +133,19 @@ void SoundPlayer::backward(unsigned int i) {
         channel->setPosition(c-i,FMOD_TIMEUNIT_MS);
 }
 
-void SoundPlayer::echo(float time) {
-    dsp_echo->setParameterFloat(FMOD_DSP_ECHO_DELAY, time);
+// paramValue from 0 to 100
+void SoundPlayer::echo(int paramIndex, int paramValue) {
+    float v;
+    if(paramIndex == FMOD_DSP_ECHO_DELAY){
+        v = ((float)paramValue)/100.0f * 4990.0f + 10.0f;
+    }
+    if(paramIndex == FMOD_DSP_ECHO_DRYLEVEL){
+        v = ((float)paramValue)/100.0f * 90.0f - 80.0f;
+    }
+    if(paramIndex == FMOD_DSP_ECHO_FEEDBACK){
+       v = (float)paramValue;
+    }
+    dsp_echo->setParameterInt(paramIndex, paramValue);
 }
 
 void SoundPlayer::removeEcho() {

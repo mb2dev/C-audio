@@ -31,7 +31,8 @@ HEADERS += \
     levelsection.h \
     filebrowser.h \
     soundmanager.h \
-    soundplayer.h
+    soundplayer.h \
+    pluginloader.h
 
 # From Spectrum Example
 SOURCES += \

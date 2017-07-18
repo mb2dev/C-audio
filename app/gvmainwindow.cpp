@@ -27,8 +27,8 @@ void GVMainWindow::createUi()
     /////////CENTRAL WIDGET//////////////
 
 //    QGridLayout *grid = new QGridLayout;
-    p_a = new AudioSection(0, 0, m_soundmanager);
-    p_b = new AudioSection(0, 1, m_soundmanager);
+    p_a = new AudioSection(0, 0, m_soundmanager, qApp->applicationDirPath());
+    p_b = new AudioSection(0, 1, m_soundmanager, qApp->applicationDirPath());
     browser = new FileBrowser;
 
     QHBoxLayout *hbl_top = new QHBoxLayout;

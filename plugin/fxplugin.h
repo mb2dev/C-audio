@@ -12,7 +12,7 @@ class FXPlugin : public QObject, public FXInterface
     Q_INTERFACES(FXInterface)
 
 public:
-    FXPlugin();
+    FXPlugin(QObject *parent = 0);
     virtual ~FXPlugin();
     virtual QString getName() const;
     virtual void apply() const override;

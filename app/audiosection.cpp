@@ -15,11 +15,11 @@
 
 const int NullTimerId = -1;
 
-AudioSection::AudioSection(QWidget *parent, const int orientation, SoundManager* soundmanager)
+AudioSection::AudioSection(QWidget *parent, const int orientation, SoundManager* soundmanager, QString appPath)
     : QWidget(parent)
     , m_engine(new Engine(this))
     , m_progressBar(new ProgressBar(this))
-    , m_fx(new FXSection(this))
+    , m_fx(new FXSection(appPath, this))
     , m_eq(new EQSection(this))
     , m_volume(new QSlider(this))
     , m_spectrograph(new Spectrograph(this))
@@ -312,6 +312,17 @@ void AudioSection::spectrumChanged(qint64 position, qint64 length,
 {
     m_progressBar->windowChanged(position, length);
     m_spectrograph->spectrumChanged(spectrum);
+}
+
+void AudioSection::fxChanged(FXInterface* fxinterface){
+    // TODO
+}
+
+void AudioSection::fxParamValueChanged(int fxType, int paramIndex, int paramValue){
+    if(fxType == FMOD_DSP_TYPE_ECHO){
+        m_soundmanager->player_a->echo(paramIndex, paramValue);
+    }
+
 }
 
 //-----------------------------------------------------------------------------
