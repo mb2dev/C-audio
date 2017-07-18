@@ -1,4 +1,5 @@
-# C-audio
+Audio Mixer
+==========================
 
 Librairies utilisées:
 * [FMOD](http://www.fmod.com/)
